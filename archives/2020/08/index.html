@@ -1,62 +1,33 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post-collapse.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
-
-{% block title %}{{ __('title.archive') }} | {{ config.title }}{% endblock %}
-
-{% block page_class %}page-archive{% endblock %}
-
-{% block content %}
-
-  {#####################}
-  {### ARCHIVE BLOCK ###}
-  {#####################}
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
-
-      <span class="archive-page-counter">
-        {% set cheers %}
-        {% set posts_length = site.posts.length %}
-        {% if posts_length > 210 %} {% set cheers = 'excellent' %}
-          {% elif posts_length > 130 %} {% set cheers = 'great' %}
-          {% elif posts_length > 80 %} {% set cheers = 'good' %}
-          {% elif posts_length > 50 %} {% set cheers = 'nice' %}
-          {% elif posts_length > 30 %} {% set cheers = 'ok' %}
-        {% else %}
-          {% set cheers = 'um' %}
-        {% endif %}
-        {{ __('cheers.' + cheers) }}! {{ _p("counter.archive_posts", site.posts.length) }} {{ __('keep_on') }}
-      </span>
-
-      {% for post in page.posts %}
-
-        {# Show year #}
-        {% set year %}
-        {% set post.year = date(post.date, 'YYYY') %}
-
-        {% if post.year !== year %}
-          {% set year = post.year %}
-          <div class="collection-title">
-            <{% if theme.seo %}h2{% else %}h1{% endif %} class="archive-year" id="archive-year-{{ year }}">{{ year }}</{% if theme.seo %}h2{% else %}h1{% endif %}>
-          </div>
-        {% endif %}
-        {# endshow #}
-
-        {{ post_template.render(post) }}
-
-      {% endfor %}
-
-    </div>
-  </div>
-  {#########################}
-  {### END ARCHIVE BLOCK ###}
-  {#########################}
-
-  {% include '_partials/pagination.swig' %}
-
-{% endblock %}
-
-{% block sidebar %}
-  {{ sidebar_template.render(false) }}
-{% endblock %}
+<!doctype html>
+<html lang="{{ config.language }}">
+<head>
+<meta charset="utf-8">
+<title>{{ title }}</title>
+<base href="{{ config.root }}">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+<link rel="canonical" href="{{ url_trim(url) }}">
+<link rel="icon" type="image/x-icon" href="{{ url_for(theme.favicon) }}">
+{% if theme.pwa.manifest %}
+<link rel="manifest" href="{{ url_for('manifest.json') }}">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+{% endif %}
+{{ open_graph({ image: page.thumbnail || theme.profile.avatar }) | safe }}
+{% if theme.seo.structured_data %}
+{{ structured_data(page) | safe }}
+{% endif %}
+{% if config.feed and config.feed.path %}
+<link rel="alternate" type="application/atom+xml" title="{{ config.title }}" href="{{ url_for(config.feed.path) }}">
+{% endif %}
+{{ theme.styles | safe }}
+{{ css({ href: 'theme.' + theme.runtime.themeHash, is: 'theme' }) | safe }}
+{{ js('config.' + theme.runtime.configHash) | safe }}
+{% if theme.ga %}
+{{ ga(theme.ga) | safe }}
+{% endif %}
+<meta name="generator" content="Hexo 5.0.0"></head>
+<body lang="{{ config.language }}">
+<{{ theme.runtime.selector }}></{{ theme.runtime.selector }}>
+{{ theme.scripts | safe }}
+</body>
+</html>
