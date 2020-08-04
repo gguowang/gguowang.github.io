@@ -289,7 +289,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-08-04 00:00:00 / 修改时间：09:33:27" itemprop="dateCreated datePublished" datetime="2020-08-04T00:00:00+08:00">2020-08-04</time>
+              <time title="创建时间：2020-08-04 00:00:00 / 修改时间：09:35:24" itemprop="dateCreated datePublished" datetime="2020-08-04T00:00:00+08:00">2020-08-04</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -334,80 +334,14 @@
 </ol>
 </blockquote>
 <p>Proguard在Android Studio中都已经内置，每次新创建一个工程时，都会自动在gradle中被添加。</p>
-<p><strong>2 调试器检测</strong><br>利用Java层API来判断Android程序是否是处于被调试下。进行动态调试的时候，需要进行jdb连接：jdb -connect com.sun.jdi.SocketAttach:hostname=127.0.0.1,port=8700，当接连成功之后，android.os.Debug.isDebuggerConnected() 这个方法就会ture。这就跟系统的android.os.Debug.isDebuggerConnected()方法有关。解决也很简单，使用反编译工具方便程序，然后搜索isDebuggerConnected() 关键字， 然后Nop 掉改函数的调用即可。<br>还有就是判断当前应用属性：ApplicationInfo.FLAG_DEBUGGABLE。在反编译后AndroidMainfiest,xml 中添加：android：debuggable=”true”。</p>
-<h2 id="native层"><a href="#native层" class="headerlink" title="native层"></a>native层</h2><p><strong>1 ptrace检测</strong><br>每个进程同时刻只能被1个调试进程ptrace，再次p自己会失败。所以可以主动ptrace自己,根据返回值判断自己是否被调试了；或者多进程ptrace。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 单线程ptrace</span><br><span class="line">void ptraceCheck()</span><br><span class="line">&#123;</span><br><span class="line">&#x2F;&#x2F; ptrace如果被调试返回值为-1，如果正常运行，返回值为0</span><br><span class="line">int iRet&#x3D;ptrace(PTRACE_TRACEME, 0, 0, 0);</span><br><span class="line">if(-1 &#x3D;&#x3D; iRet)</span><br><span class="line">&#123;</span><br><span class="line">LOGA(&quot;ptrace失败，进程正在被调试\n&quot;);</span><br><span class="line">return;</span><br><span class="line">&#125;</span><br><span class="line">else</span><br><span class="line">&#123;</span><br><span class="line">LOGB(&quot;ptrace的返回值为:%d\n&quot;,iRet);</span><br><span class="line">return;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>2 进程名检测</strong><br>远程调试要在手机中运行android_server gdbserver gdb等进程，遍历进程，查找固定的进程名，如果能找到就说明调试器在运行。<br>有的时候不使用apk附加调试的方法进行逆向，而是写一个.out可执行文件直接加载so进行调试，这样程序的父进程名和正常启动apk的父进程名是不一样的。正常启动的apk程序父进程是zygote。如果不是，则证明为调试状态。<br>还有就是自身进程名，正常进程名一般是apk的com.xxx这样的格式。<br><strong>3 apk线程检测</strong><br>正常apk进程一般会有十几个线程在运行(比如会有jdwp线程)，自己写可执行文件加载so一般只有一个线程，可以根据这个差异来进行调试环境检测（咱们没用过，咱啥也不知道）。<br><strong>4 安卓系统调试检测函数</strong><br>这个跟上面有点重复。分析android自带调试检测函数isDebuggerConnected()在native的实现， 尝试在native使用。</p>
-<blockquote>
-<p>（1）dalvik模式下:<br> 找到进程中libdvm.so中的dvmDbgIsDebuggerConnected()函数，<br>调用他就能得知程序是否被调试。  dlopen(/system/lib/libdvm.so)<br>dlsym(_Z25dvmDbgIsDebuggerConnectedv)<br>（2）art模式下：<br>art模式下，结果存放在libart.so中的全局变量gDebuggerActive中，<br>符号名为_ZN3art3Dbg15gDebuggerActiveE。<br>但是貌似新版本android不允许使用非ndk原生库，dlopen(libart.so)会失败。  所以无法用dalvik那样的方法了。</p>
-</blockquote>
-<p><strong>5 轮询检测法</strong><br>轮询TracePid<br><img data-src="https://img-blog.csdnimg.cn/20190907150036608.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3JlX3BzeWNoZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>这个主要是参考了<a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.cnblogs.com/jiaoxiake/p/6790803.html%EF%BC%8C%E5%8F%AF%E4%BB%A5%E8%BF%9B%E5%8E%BB%E4%BA%86%E8%A7%A3%E4%B8%8B%E3%80%82">https://www.cnblogs.com/jiaoxiake/p/6790803.html，可以进去了解下。</a></p>
-<p><strong>6 断点检测</strong><br>如果函数被下软件断点，则断点地址会被改写为bkpt指令， 可以在函数体中搜索bkpt指令来检测软件断点。</p>
-<pre><code>// IDA 6.8 断点扫描
-// 参数1：函数首地址 参数2：函数size
-typedef uint8_t u8;
-typedef uint32_t u32;
-void checkbkpt(u8* addr,u32 size)
-&#123;
-// 结果
-u32 uRet=0;
-// 断点指令
-// u8 armBkpt[4]=&#123;0xf0,0x01,0xf0,0xe7&#125;;
-// u8 thumbBkpt[2]=&#123;0x10,0xde&#125;;
-u8 armBkpt[4]=&#123;0&#125;;
-armBkpt[0]=0xf0;
-armBkpt[1]=0x01;
-armBkpt[2]=0xf0;
-armBkpt[3]=0xe7;
-u8 thumbBkpt[2]=&#123;0&#125;;
-thumbBkpt[0]=0x10;
-thumbBkpt[1]=0xde;
-// 判断模式
-int mode=(u32)addr%2;
-if(1==mode) &#123;
-LOGA(&quot;checkbkpt:(thumb mode)该地址为thumb模式\n&quot;);
-u8* start=(u8*)((u32)addr-1);
-u8* end=(u8*)((u32)start+size);
-// 遍历对比
-while(1)
-&#123;
-if(start &gt;= end) &#123;
-uRet=0;
-LOGA(&quot;checkbkpt:(no find bkpt)没有发现断点.\n&quot;);
-break;
-&#125;
-if( 0==memcmp(start,thumbBkpt,2) ) &#123;
-uRet=1;
-LOGA(&quot;checkbkpt:(find it)发现断点.\n&quot;);
-break;
-&#125;
-start=start+2;
-&#125;//while
-&#125;//if
-else
-&#123;
-LOGA(&quot;checkbkpt:(arm mode)该地址为arm模式\n&quot;);
-u8* start=(u8*)addr;
-u8* end=(u8*)((u32)start+size);
-// 遍历对比
-while(1)
- &#123;
-if (start &gt;= end) &#123;
-uRet = 0;
-LOGA(&quot;checkbkpt:(no find)没有发现断点.\n&quot;);
-break;
-&#125;
-if (0 == memcmp(start,armBkpt , 4))&#123;
-uRet = 1;
-LOGA(&quot;checkbkpt:(find it)发现断点.\n&quot;);
-break;
-&#125;
-start = start + 4;
-&#125;//while
-&#125;//else
-return;
-&#125;</code></pre>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/08/04/Android%E5%8F%8D%E8%B0%83%E8%AF%95%E6%A3%80%E6%B5%8B/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 

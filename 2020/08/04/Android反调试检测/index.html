@@ -33,7 +33,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20190907150036608.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3JlX3BzeWNoZQ==,size_16,color_FFFFFF,t_70">
 <meta property="article:published_time" content="2020-08-03T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-08-04T01:33:27.277Z">
+<meta property="article:modified_time" content="2020-08-04T01:35:24.164Z">
 <meta property="article:author" content="psych1">
 <meta property="article:tag" content="Android">
 <meta name="twitter:card" content="summary">
@@ -297,7 +297,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-08-04 00:00:00 / 修改时间：09:33:27" itemprop="dateCreated datePublished" datetime="2020-08-04T00:00:00+08:00">2020-08-04</time>
+              <time title="创建时间：2020-08-04 00:00:00 / 修改时间：09:35:24" itemprop="dateCreated datePublished" datetime="2020-08-04T00:00:00+08:00">2020-08-04</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -349,6 +349,7 @@
 </ol>
 </blockquote>
 <p>Proguard在Android Studio中都已经内置，每次新创建一个工程时，都会自动在gradle中被添加。</p>
+<a id="more"></a>
 <p><strong>2 调试器检测</strong><br>利用Java层API来判断Android程序是否是处于被调试下。进行动态调试的时候，需要进行jdb连接：jdb -connect com.sun.jdi.SocketAttach:hostname=127.0.0.1,port=8700，当接连成功之后，android.os.Debug.isDebuggerConnected() 这个方法就会ture。这就跟系统的android.os.Debug.isDebuggerConnected()方法有关。解决也很简单，使用反编译工具方便程序，然后搜索isDebuggerConnected() 关键字， 然后Nop 掉改函数的调用即可。<br>还有就是判断当前应用属性：ApplicationInfo.FLAG_DEBUGGABLE。在反编译后AndroidMainfiest,xml 中添加：android：debuggable=”true”。</p>
 <h2 id="native层"><a href="#native层" class="headerlink" title="native层"></a>native层</h2><p><strong>1 ptrace检测</strong><br>每个进程同时刻只能被1个调试进程ptrace，再次p自己会失败。所以可以主动ptrace自己,根据返回值判断自己是否被调试了；或者多进程ptrace。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 单线程ptrace</span><br><span class="line">void ptraceCheck()</span><br><span class="line">&#123;</span><br><span class="line">&#x2F;&#x2F; ptrace如果被调试返回值为-1，如果正常运行，返回值为0</span><br><span class="line">int iRet&#x3D;ptrace(PTRACE_TRACEME, 0, 0, 0);</span><br><span class="line">if(-1 &#x3D;&#x3D; iRet)</span><br><span class="line">&#123;</span><br><span class="line">LOGA(&quot;ptrace失败，进程正在被调试\n&quot;);</span><br><span class="line">return;</span><br><span class="line">&#125;</span><br><span class="line">else</span><br><span class="line">&#123;</span><br><span class="line">LOGB(&quot;ptrace的返回值为:%d\n&quot;,iRet);</span><br><span class="line">return;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
