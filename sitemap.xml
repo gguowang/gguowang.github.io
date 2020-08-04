@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.psych1.cn/2020/08/04/Android%E5%8F%8D%E8%B0%83%E8%AF%95%E6%A3%80%E6%B5%8B/</loc>
+    
+    <lastmod>2020-08-04</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://www.psych1.cn/lib/canvas-nest/README.html</loc>
     
     <lastmod>2020-08-04</lastmod>
@@ -88,6 +95,13 @@
   </url>
   
 
+  
+  <url>
+    <loc>https://www.psych1.cn/categories/Android%E9%80%86%E5%90%91-%E5%8F%8D%E8%B0%83%E8%AF%95/</loc>
+    <lastmod>2020-08-04</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
   
   <url>
     <loc>https://www.psych1.cn/categories/Android%E9%80%86%E5%90%91-%E6%8A%93%E5%8C%85/</loc>
