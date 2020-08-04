@@ -24,12 +24,12 @@
     var CONFIG = {"hostname":"www.psych1.cn","root":"/","scheme":"Gemini","version":"8.0.0-rc.5","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"bounceIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false};
   </script>
 
-  <meta name="description" content="前言每次分析app时都免不了抓包这一环节。想要抓到包就要看app采取的什么通信协议了。由于http存在的种种不安全性，当前大部分的app基本都已经是采用https的通信协议。所以连抓包也变得越来越不友好。不论是使用burpsuite还是fiddler，当前的抓包工具基本原理都是采用的中间人的方式。原理就是这些工具作为中间人，对客户端伪装成服务端，对服务端伪装成客户端。 HTTPShttp即超文本传">
+  <meta name="description" content="前言每次分析app时都免不了抓包这一环节。想要抓到包就要看app采取的什么通信协议了。由于http存在的种种不安全性，当前大部分的app基本都已经是采用https的通信协议。所以连抓包也变得越来越不友好。不论是使用burpsuite还是fiddler，当前的抓包工具基本原理都是采用的中间人的方式。原理就是这些工具作为中间人，对客户端伪装成服务端，对服务端伪装成客户端。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="android系统https抓包问题分析">
 <meta property="og:url" content="https://www.psych1.cn/2020/08/03/android%E7%B3%BB%E7%BB%9Fhttps%E6%8A%93%E5%8C%85%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%90/index.html">
 <meta property="og:site_name" content="Psych1&#39;s Blog">
-<meta property="og:description" content="前言每次分析app时都免不了抓包这一环节。想要抓到包就要看app采取的什么通信协议了。由于http存在的种种不安全性，当前大部分的app基本都已经是采用https的通信协议。所以连抓包也变得越来越不友好。不论是使用burpsuite还是fiddler，当前的抓包工具基本原理都是采用的中间人的方式。原理就是这些工具作为中间人，对客户端伪装成服务端，对服务端伪装成客户端。 HTTPShttp即超文本传">
+<meta property="og:description" content="前言每次分析app时都免不了抓包这一环节。想要抓到包就要看app采取的什么通信协议了。由于http存在的种种不安全性，当前大部分的app基本都已经是采用https的通信协议。所以连抓包也变得越来越不友好。不论是使用burpsuite还是fiddler，当前的抓包工具基本原理都是采用的中间人的方式。原理就是这些工具作为中间人，对客户端伪装成服务端，对服务端伪装成客户端。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20200315161339959.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3JlX3BzeWNoZQ==,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20200315164941104.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3JlX3BzeWNoZQ==,size_16,color_FFFFFF,t_70">
@@ -41,7 +41,7 @@
 <meta property="og:image" content="https://img-blog.csdnimg.cn/202003151826483.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3JlX3BzeWNoZQ==,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/2020031518342243.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3JlX3BzeWNoZQ==,size_16,color_FFFFFF,t_70">
 <meta property="article:published_time" content="2020-08-03T15:03:02.000Z">
-<meta property="article:modified_time" content="2020-08-04T00:45:55.475Z">
+<meta property="article:modified_time" content="2020-08-04T01:36:10.589Z">
 <meta property="article:author" content="psych1">
 <meta property="article:tag" content="Android">
 <meta name="twitter:card" content="summary">
@@ -311,7 +311,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-04 08:45:55" itemprop="dateModified" datetime="2020-08-04T08:45:55+08:00">2020-08-04</time>
+                <time title="修改时间：2020-08-04 09:36:10" itemprop="dateModified" datetime="2020-08-04T09:36:10+08:00">2020-08-04</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -354,12 +354,12 @@
     
     <div class="post-body" itemprop="articleBody">
         <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>每次分析app时都免不了抓包这一环节。想要抓到包就要看app采取的什么通信协议了。由于http存在的种种不安全性，当前大部分的app基本都已经是采用https的通信协议。所以连抓包也变得越来越不友好。不论是使用burpsuite还是fiddler，当前的抓包工具基本原理都是采用的中间人的方式。原理就是这些工具作为中间人，对客户端伪装成服务端，对服务端伪装成客户端。</p>
+<a id="more"></a>
 <h2 id="HTTPS"><a href="#HTTPS" class="headerlink" title="HTTPS"></a>HTTPS</h2><p>http即超文本传输协议，是互联网上应用最为广泛的一种网络协议 ，是一个客户端和服务器端请求和应答的标准（TCP），用于从WWW服务器传输超文本到本地浏览器的传输协议，它可以使浏览器更加高效，使网络传输减少。然而他也存在着一些缺点，比如通信使用明文，内容极易被窃听；不验证通信方的身份，因此有可能遭遇伪装；无法证明报文的完整性，所以有可能遭到篡改。因此，http的加强版https应运而生。https中的s是ssl或者tls，就是在原HTTP的基础上加上一层用于数据加密、解密、身份认证的安全层。</p>
 <blockquote>
 <p>HTTP + 加密 + 认证 + 完整性保护 = HTTPS</p>
 </blockquote>
 <p>https需要CA证书，我们之前说的中间人需要对客户端伪装成真正的服务端，要求就是当客户端向我们发送网络请求时，我们必须能够给指定域名签发公钥证书，且公钥证书能够通过系统的安全校验。对于我们是不是真正的客户端，通常来说服务器是不太会关心的，他是不会去关心你是谷歌浏览器还是百度浏览器，当然了也会有例外。接下来要说的双向验证就是如此。</p>
-<a id="more"></a>
 <h2 id="单向验证与双向验证"><a href="#单向验证与双向验证" class="headerlink" title="单向验证与双向验证"></a>单向验证与双向验证</h2><p>首先了解一下什么是https的单双向验证，主要说一下双向验证，双向验证相比较单向验证，增加了服务端对客户端的认证。<br><img data-src="https://img-blog.csdnimg.cn/20200315161339959.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3JlX3BzeWNoZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <p>双向认证详细过程如下：</p>
 <blockquote>
