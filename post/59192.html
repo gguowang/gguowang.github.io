@@ -24,22 +24,22 @@
     var CONFIG = {"hostname":"www.psych1.cn","root":"/","scheme":"Gemini","version":"8.0.0-rc.5","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"bounceIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false};
   </script>
 
-  <meta name="description" content="先放上Android API官方图镇楼。oncreate()-&gt;onstart()-&gt;onResume()-&gt;onRestart()-&gt;onPouse()-&gt;onStop()-&gt;onDestory()">
+  <meta name="description" content="java层保护1 代码混淆apk应用在被逆向分析时，java层代码就像被扒光一样，而native代码分析难度大，但是需要扎实的c&#x2F;c++基础。这个时候大家就可以考虑一下代码混淆技术稍作保护（毕竟看着好多abc也挺烦的）。Android开发中提供了Proguard这一工具来进行代码混淆。这里只做简单介绍，Proguard是一个开源项目，他能够对Java类中的代码进行压缩（Shrink）,优化（Opt">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android Activity生命周期">
-<meta property="og:url" content="https://www.psych1.cn/Android%20Activity%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/index.html">
+<meta property="og:title" content="Android反调试检测">
+<meta property="og:url" content="https://www.psych1.cn/post/59192.html">
 <meta property="og:site_name" content="Psych1&#39;s Blog">
-<meta property="og:description" content="先放上Android API官方图镇楼。oncreate()-&gt;onstart()-&gt;onResume()-&gt;onRestart()-&gt;onPouse()-&gt;onStop()-&gt;onDestory()">
+<meta property="og:description" content="java层保护1 代码混淆apk应用在被逆向分析时，java层代码就像被扒光一样，而native代码分析难度大，但是需要扎实的c&#x2F;c++基础。这个时候大家就可以考虑一下代码混淆技术稍作保护（毕竟看着好多abc也挺烦的）。Android开发中提供了Proguard这一工具来进行代码混淆。这里只做简单介绍，Proguard是一个开源项目，他能够对Java类中的代码进行压缩（Shrink）,优化（Opt">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/2019031714565797.gif">
-<meta property="article:published_time" content="2020-08-04T01:00:00.000Z">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190907150036608.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3JlX3BzeWNoZQ==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2020-08-03T16:00:00.000Z">
 <meta property="article:modified_time" content="2020-08-04T15:17:52.233Z">
 <meta property="article:author" content="psych1">
 <meta property="article:tag" content="Android">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://img-blog.csdnimg.cn/2019031714565797.gif">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190907150036608.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3JlX3BzeWNoZQ==,size_16,color_FFFFFF,t_70">
 
-<link rel="canonical" href="https://www.psych1.cn/Android%20Activity%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">
+<link rel="canonical" href="https://www.psych1.cn/post/59192.html">
 
 
 <script class="page-configurations">
@@ -52,7 +52,7 @@
   };
 </script>
 
-  <title>Android Activity生命周期 | Psych1's Blog</title>
+  <title>Android反调试检测 | Psych1's Blog</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-174298244-1"></script>
     <script>
@@ -113,6 +113,7 @@
   </style>
 </noscript>
 
+<link rel="alternate" href="/atom.xml" title="Psych1's Blog" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
@@ -204,7 +205,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Activity%E7%9A%84%E5%9B%9B%E7%A7%8D%E7%8A%B6%E6%80%81"><span class="nav-number">1.</span> <span class="nav-text">Activity的四种状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Activity%E7%9A%84%E4%B8%83%E4%B8%AA%E5%9B%9E%E8%B0%83%E6%96%B9%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">Activity的七个回调方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Activity%E7%9A%84%E4%B8%89%E4%B8%AA%E7%94%9F%E5%AD%98%E5%91%A8%E6%9C%9F"><span class="nav-number">3.</span> <span class="nav-text">Activity的三个生存周期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#java%E5%B1%82%E4%BF%9D%E6%8A%A4"><span class="nav-number">1.</span> <span class="nav-text">java层保护</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#native%E5%B1%82"><span class="nav-number">2.</span> <span class="nav-text">native层</span></a></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -271,7 +272,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.psych1.cn/Android%20Activity%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">
+    <link itemprop="mainEntityOfPage" href="https://www.psych1.cn/post/59192.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -286,7 +287,7 @@
     
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Android Activity生命周期
+          Android反调试检测
         </h1>
 
         <div class="post-meta">
@@ -297,7 +298,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-08-04 09:00:00 / 修改时间：23:17:52" itemprop="dateCreated datePublished" datetime="2020-08-04T09:00:00+08:00">2020-08-04</time>
+              <time title="创建时间：2020-08-04 00:00:00 / 修改时间：23:17:52" itemprop="dateCreated datePublished" datetime="2020-08-04T00:00:00+08:00">2020-08-04</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -305,7 +306,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" itemprop="url" rel="index"><span itemprop="name">生命周期</span></a>
+                  <a href="/categories/%E5%8F%8D%E8%B0%83%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">反调试</span></a>
                 </span>
             </span>
 
@@ -322,7 +323,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.8k</span>
+              <span>3.2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -339,18 +340,90 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>先放上Android API官方图镇楼。<br><img data-src="https://img-blog.csdnimg.cn/2019031714565797.gif" alt="oncreate()-&gt;onstart()-&gt;onResume()-&gt;onRestart()-&gt;onPouse()-&gt;onStop()-&gt;onDestory()"><br>oncreate()-&gt;onstart()-&gt;onResume()-&gt;onRestart()-&gt;onPouse()-&gt;onStop()-&gt;onDestory()</p>
+        <h2 id="java层保护"><a href="#java层保护" class="headerlink" title="java层保护"></a>java层保护</h2><p><strong>1 代码混淆</strong><br>apk应用在被逆向分析时，java层代码就像被扒光一样，而native代码分析难度大，但是需要扎实的c/c++基础。这个时候大家就可以考虑一下代码混淆技术稍作保护（毕竟看着好多abc也挺烦的）。Android开发中提供了Proguard这一工具来进行代码混淆。<br>这里只做简单介绍，Proguard是一个开源项目，他能够对Java类中的代码进行压缩（Shrink）,优化（Optimize）,混淆（Obfuscate）,预检（Preveirfy）。　</p>
+<blockquote>
+<ol>
+<li>压缩（Shrink）:在压缩处理这一步中，用于检测和删除没有使用的类，字段，方法和属性。</li>
+<li>优化（Optimize）:在优化处理这一步中，对字节码进行优化，并且移除无用指令。</li>
+<li>混淆（Obfuscate）:在混淆处理这一步中，使用a,b,c等无意义的名称，对类，字段和方法进行重命名。</li>
+<li>预检（Preveirfy）:在预检这一步中，主要是在Java平台上对处理后的代码进行预检。</li>
+</ol>
+</blockquote>
+<p>Proguard在Android Studio中都已经内置，每次新创建一个工程时，都会自动在gradle中被添加。</p>
 <a id="more"></a>
-<h2 id="Activity的四种状态"><a href="#Activity的四种状态" class="headerlink" title="Activity的四种状态"></a>Activity的四种状态</h2><p>1 运行状态<br>当一个 Activity 处于前台时，即处于栈顶时，它是活动或者运行的状态。<br>2 暂停状态<br>当一个 Activity 失去焦点但仍然可见时，该 Activity 处于暂停状态（例如，在一个 Activity 上弹出一个对话框，该对话框并不铺满屏幕，原先的 Activity仍然被用户能看到）。一个处于暂停状态的 Activity 仍然是完全存活的（它会保存之前的状态和成员变量），但在内存极低的情况下会被系统杀死。<br>3 停止状态<br>但一个 Activity 完全被另一个 Activity 隐藏时，该 Activity 处于停止状态（即该 Activity 不再处于栈顶，并且不对用户来说可见时）。处于停止状态的 Activity 会保存之前的状态和成员变量，但在系统内存不够时，有可能被系统杀死（这种概率比处于暂停状态的 Activity 高）。<br>4 销毁状态<br>当一个 Activity 被移出返回栈时，它就处于销毁状态。处于销毁状态的 Activity 最有可能被系统回收。</p>
-<h2 id="Activity的七个回调方法"><a href="#Activity的七个回调方法" class="headerlink" title="Activity的七个回调方法"></a>Activity的七个回调方法</h2><p>1 onCreate:create表示创建，这是Activity生命周期的第一个方法，也是我们在android开发中接触的最多的生命周期方法。它本身的作用是进行Activity的一些初始化工作，比如使用setContentView加载布局，对一些控件和变量进行初始化等。但也有很多人将很多与初始化无关的代码放在这，其实这是不规范的。此时Activity还在后台，不可见。所以动画不应该在这里初始化，因为看不到……<br>2 onStart:start表示启动，这是Activity生命周期的第二个方法。此时Activity已经可见了，但是还没出现在前台，我们还看不到，无法与Activity交互。其实将Activity的初始化工作放在这也没有什么问题，放在onCreate中是由于官方推荐的以及我们开发的习惯。<br>3 onResume:resume表示继续、重新开始，这名字和它的职责也相同。此时Activity经过前两个阶段的初始化已经蓄势待发。Activity在这个阶段已经出现在前台并且可见了。这个阶段可以打开独占设备<br>4 onPause:pause表示暂停，当Activity要跳到另一个Activity或应用正常退出时都会执行这个方法。此时Activity在前台并可见，我们可以进行一些轻量级的存储数据和去初始化的工作，不能太耗时，因为在跳转Activity时只有当一个Activity执行完了onPause方法后另一个Activity才会启动，而且android中指定如果onPause在500ms即0.5秒内没有执行完毕的话就会强制关闭Activity。从生命周期图中发现可以在这快速重启，但这种情况其实很罕见，比如用户切到下一个Activity的途中按back键快速得切回来。<br>5 onStop：stop表示停止，此时Activity已经不可见了，但是Activity对象还在内存中，没有被销毁。这个阶段的主要工作也是做一些资源的回收工作。<br>6 onDestroy：destroy表示毁灭，这个阶段Activity被销毁，不可见，我们可以将还没释放的资源释放，以及进行一些回收工作。<br>7 onRestart：restart表示重新开始，Activity在这时可见，当用户按Home键切换到桌面后又切回来或者从后一个Activity切回前一个Activity就会触发这个方法。这里一般不做什么操作。</p>
-<h2 id="Activity的三个生存周期"><a href="#Activity的三个生存周期" class="headerlink" title="Activity的三个生存周期"></a>Activity的三个生存周期</h2><p>activity的三个生存周期，我们从上图也可以看的出来，主要介绍一下调用时间段。<br><strong>完整生存期</strong><br>Activity 的完整生存期是指在 <code>onCreate()</code> 方法第一次被调用和 <code>onDestroy()</code> 方法最后一次被调用之间的时间段；<br>应当在 <code>onCreate()</code> 方法内完成初始化操作， 并在 <code>onDestroy()</code> 方法内释放内存。<br><strong>可见生存期</strong><br>Activity 的可见生存期是指在 <code>onStart()</code> 方法被调用和 <code>onStop()</code> 方法被调用之间的时间段；<br>在可见生存期内，Activity 是可见的，即使该 Activity 不再前台和无法与用户交互；<br>在 Activity 的整个生命周期，当 Activity 在对用户可见和隐藏两种状态中交替变化时，系统可能会多次调用 <code>onStart()</code> 方法和 <code>onStop()</code> 方法。<br><strong>前台生存期</strong><br>Activity 的前台生存期是指在 <code>onResume()</code> 方法被调用和 <code>onPause()</code> 方法被调用之间的时间段；<br>在前台生存期内，Activity 处于运行状态，位于屏幕上其他所有 Activity 之上，能与用户进行交互。</p>
-<p>在这里重点需要关注的问题应该是Activity切换时的操作顺序。<br>(A)onPause→(B)onCreate→(B)onStart→(B)onResume→(A)onStop（正解）<br>(A)onPause→(A)onStop→(B)onCreate→(B)onStart→(B)onResume（错误）<br>（1）一个Activity或多或少会占有系统资源，而在官方的建议中，onPause方法将会释放掉很多系统资源，为切换Activity提供流畅性的保障，而不需要再等多两个阶段，这样做切换更快。<br>（2）按照生命周期图的表示，如果用户在切换Activity的过程中再次切回原Activity，是在onPause方法后直接调用onResume方法的，这样比onPause→onStop→onRestart→onStart→onResume要快得多。<br>举个例子来帮助记忆，当我们编辑完短信内容还没有发送，然后切换到桌面，这时短信内容并没有被销毁。<br>我们可以借助官方文档的代码，写一个demo帮助记忆。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public class Activity extends ApplicationContext &#123;</span><br><span class="line">       protected void onCreate(Bundle savedInstanceState);</span><br><span class="line">       </span><br><span class="line">       protected void onStart();   </span><br><span class="line">       </span><br><span class="line">       protected void onRestart();</span><br><span class="line">       </span><br><span class="line">       protected void onResume();</span><br><span class="line">       </span><br><span class="line">       protected void onPause();</span><br><span class="line">       </span><br><span class="line">       protected void onStop();</span><br><span class="line">       </span><br><span class="line">       protected void onDestroy();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<p>我们只需重写代码即可，参考log，即可更清楚的了解运行周期。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>Android官方文档<br>《第一行代码》<br><a target="_blank" rel="external nofollow noopener noreferrer" href="https://blog.csdn.net/android_tutor/article/details/5772285">https://blog.csdn.net/android_tutor/article/details/5772285</a></p>
+<p><strong>2 调试器检测</strong><br>利用Java层API来判断Android程序是否是处于被调试下。进行动态调试的时候，需要进行jdb连接：jdb -connect com.sun.jdi.SocketAttach:hostname=127.0.0.1,port=8700，当接连成功之后，android.os.Debug.isDebuggerConnected() 这个方法就会ture。这就跟系统的android.os.Debug.isDebuggerConnected()方法有关。解决也很简单，使用反编译工具方便程序，然后搜索isDebuggerConnected() 关键字， 然后Nop 掉改函数的调用即可。<br>还有就是判断当前应用属性：ApplicationInfo.FLAG_DEBUGGABLE。在反编译后AndroidMainfiest,xml 中添加：android：debuggable=”true”。</p>
+<h2 id="native层"><a href="#native层" class="headerlink" title="native层"></a>native层</h2><p><strong>1 ptrace检测</strong><br>每个进程同时刻只能被1个调试进程ptrace，再次p自己会失败。所以可以主动ptrace自己,根据返回值判断自己是否被调试了；或者多进程ptrace。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 单线程ptrace</span><br><span class="line">void ptraceCheck()</span><br><span class="line">&#123;</span><br><span class="line">&#x2F;&#x2F; ptrace如果被调试返回值为-1，如果正常运行，返回值为0</span><br><span class="line">int iRet&#x3D;ptrace(PTRACE_TRACEME, 0, 0, 0);</span><br><span class="line">if(-1 &#x3D;&#x3D; iRet)</span><br><span class="line">&#123;</span><br><span class="line">LOGA(&quot;ptrace失败，进程正在被调试\n&quot;);</span><br><span class="line">return;</span><br><span class="line">&#125;</span><br><span class="line">else</span><br><span class="line">&#123;</span><br><span class="line">LOGB(&quot;ptrace的返回值为:%d\n&quot;,iRet);</span><br><span class="line">return;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>2 进程名检测</strong><br>远程调试要在手机中运行android_server gdbserver gdb等进程，遍历进程，查找固定的进程名，如果能找到就说明调试器在运行。<br>有的时候不使用apk附加调试的方法进行逆向，而是写一个.out可执行文件直接加载so进行调试，这样程序的父进程名和正常启动apk的父进程名是不一样的。正常启动的apk程序父进程是zygote。如果不是，则证明为调试状态。<br>还有就是自身进程名，正常进程名一般是apk的com.xxx这样的格式。<br><strong>3 apk线程检测</strong><br>正常apk进程一般会有十几个线程在运行(比如会有jdwp线程)，自己写可执行文件加载so一般只有一个线程，可以根据这个差异来进行调试环境检测（咱们没用过，咱啥也不知道）。<br><strong>4 安卓系统调试检测函数</strong><br>这个跟上面有点重复。分析android自带调试检测函数isDebuggerConnected()在native的实现， 尝试在native使用。</p>
+<blockquote>
+<p>（1）dalvik模式下:<br> 找到进程中libdvm.so中的dvmDbgIsDebuggerConnected()函数，<br>调用他就能得知程序是否被调试。  dlopen(/system/lib/libdvm.so)<br>dlsym(_Z25dvmDbgIsDebuggerConnectedv)<br>（2）art模式下：<br>art模式下，结果存放在libart.so中的全局变量gDebuggerActive中，<br>符号名为_ZN3art3Dbg15gDebuggerActiveE。<br>但是貌似新版本android不允许使用非ndk原生库，dlopen(libart.so)会失败。  所以无法用dalvik那样的方法了。</p>
+</blockquote>
+<p><strong>5 轮询检测法</strong><br>轮询TracePid<br><img data-src="https://img-blog.csdnimg.cn/20190907150036608.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3JlX3BzeWNoZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>这个主要是参考了<a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.cnblogs.com/jiaoxiake/p/6790803.html%EF%BC%8C%E5%8F%AF%E4%BB%A5%E8%BF%9B%E5%8E%BB%E4%BA%86%E8%A7%A3%E4%B8%8B%E3%80%82">https://www.cnblogs.com/jiaoxiake/p/6790803.html，可以进去了解下。</a></p>
+<p><strong>6 断点检测</strong><br>如果函数被下软件断点，则断点地址会被改写为bkpt指令， 可以在函数体中搜索bkpt指令来检测软件断点。</p>
+<pre><code>// IDA 6.8 断点扫描
+// 参数1：函数首地址 参数2：函数size
+typedef uint8_t u8;
+typedef uint32_t u32;
+void checkbkpt(u8* addr,u32 size)
+&#123;
+// 结果
+u32 uRet=0;
+// 断点指令
+// u8 armBkpt[4]=&#123;0xf0,0x01,0xf0,0xe7&#125;;
+// u8 thumbBkpt[2]=&#123;0x10,0xde&#125;;
+u8 armBkpt[4]=&#123;0&#125;;
+armBkpt[0]=0xf0;
+armBkpt[1]=0x01;
+armBkpt[2]=0xf0;
+armBkpt[3]=0xe7;
+u8 thumbBkpt[2]=&#123;0&#125;;
+thumbBkpt[0]=0x10;
+thumbBkpt[1]=0xde;
+// 判断模式
+int mode=(u32)addr%2;
+if(1==mode) &#123;
+LOGA(&quot;checkbkpt:(thumb mode)该地址为thumb模式\n&quot;);
+u8* start=(u8*)((u32)addr-1);
+u8* end=(u8*)((u32)start+size);
+// 遍历对比
+while(1)
+&#123;
+if(start &gt;= end) &#123;
+uRet=0;
+LOGA(&quot;checkbkpt:(no find bkpt)没有发现断点.\n&quot;);
+break;
+&#125;
+if( 0==memcmp(start,thumbBkpt,2) ) &#123;
+uRet=1;
+LOGA(&quot;checkbkpt:(find it)发现断点.\n&quot;);
+break;
+&#125;
+start=start+2;
+&#125;//while
+&#125;//if
+else
+&#123;
+LOGA(&quot;checkbkpt:(arm mode)该地址为arm模式\n&quot;);
+u8* start=(u8*)addr;
+u8* end=(u8*)((u32)start+size);
+// 遍历对比
+while(1)
+ &#123;
+if (start &gt;= end) &#123;
+uRet = 0;
+LOGA(&quot;checkbkpt:(no find)没有发现断点.\n&quot;);
+break;
+&#125;
+if (0 == memcmp(start,armBkpt , 4))&#123;
+uRet = 1;
+LOGA(&quot;checkbkpt:(find it)发现断点.\n&quot;);
+break;
+&#125;
+start = start + 4;
+&#125;//while
+&#125;//else
+return;
+&#125;</code></pre>
 
     </div>
 
@@ -366,7 +439,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://www.psych1.cn/Android%20Activity%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" title="Android Activity生命周期">https://www.psych1.cn/Android Activity生命周期/</a>
+    <a href="https://www.psych1.cn/post/59192.html" title="Android反调试检测">https://www.psych1.cn/post/59192.html</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -386,10 +459,13 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/Android%E5%8F%8D%E8%B0%83%E8%AF%95%E6%A3%80%E6%B5%8B/" rel="prev" title="Android反调试检测">
-      <i class="fa fa-chevron-left"></i> Android反调试检测
+    <a href="/post/41193.html" rel="prev" title="android系统https抓包问题分析">
+      <i class="fa fa-chevron-left"></i> android系统https抓包问题分析
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/post/16237.html" rel="next" title="Android Activity生命周期">
+      Android Activity生命周期 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
