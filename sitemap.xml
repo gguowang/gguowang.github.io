@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.psych1.cn/post/3889e387.html</loc>
+    
+    <lastmod>2021-01-04</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://www.psych1.cn/post/e6b8dc6e.html</loc>
     
     <lastmod>2020-12-28</lastmod>
@@ -119,6 +126,13 @@
   
   <url>
     <loc>https://www.psych1.cn/categories/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/</loc>
+    <lastmod>2021-01-04</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.psych1.cn/categories/Frida/</loc>
     <lastmod>2021-01-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
