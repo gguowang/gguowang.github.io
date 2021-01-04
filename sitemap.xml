@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.psych1.cn/post/3889e387.html</loc>
+    
+    <lastmod>2021-01-04</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://www.psych1.cn/post/e6b8dc6e.html</loc>
     
     <lastmod>2020-12-28</lastmod>
@@ -95,7 +102,7 @@
 
   <url>
     <loc>https://www.psych1.cn/</loc>
-    <lastmod>2020-12-28</lastmod>
+    <lastmod>2021-01-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -103,14 +110,14 @@
   
   <url>
     <loc>https://www.psych1.cn/tags/Android/</loc>
-    <lastmod>2020-12-28</lastmod>
+    <lastmod>2021-01-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://www.psych1.cn/tags/Interesting/</loc>
-    <lastmod>2020-12-28</lastmod>
+    <lastmod>2021-01-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
@@ -119,28 +126,28 @@
   
   <url>
     <loc>https://www.psych1.cn/categories/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/</loc>
-    <lastmod>2020-12-28</lastmod>
+    <lastmod>2021-01-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://www.psych1.cn/categories/%E5%8F%8D%E8%B0%83%E8%AF%95/</loc>
-    <lastmod>2020-12-28</lastmod>
+    <lastmod>2021-01-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://www.psych1.cn/categories/%E6%8A%93%E5%8C%85/</loc>
-    <lastmod>2020-12-28</lastmod>
+    <lastmod>2021-01-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://www.psych1.cn/categories/%E9%9A%8F%E7%AC%94/</loc>
-    <lastmod>2020-12-28</lastmod>
+    <lastmod>2021-01-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
